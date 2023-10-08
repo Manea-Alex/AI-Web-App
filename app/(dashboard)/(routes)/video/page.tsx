@@ -17,11 +17,13 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 
 
 
 const VideoPage = () => {
+    const proModal = useProModal()
 
     const router = useRouter()
     const [video, setVideo] = useState<string>()
@@ -47,8 +49,9 @@ const VideoPage = () => {
 
 
         } catch (error: any){
-            //TODOL Open Pro Modal
-            console.log(error)
+             if(error?.response?.status === 403){
+                proModal.onOpen()
+           }
         } finally{
             router.refresh()
         }

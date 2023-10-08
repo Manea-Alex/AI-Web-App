@@ -22,10 +22,12 @@ import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
 import { cn } from "@/lib/utils";
 import { Card, CardFooter } from "@/components/ui/card";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 
 
 const ImagePage = () => {
+    const proModal = useProModal()
 
     const router = useRouter()
     const [images, setImages] =useState<string[]>([])
@@ -45,8 +47,7 @@ const ImagePage = () => {
     const onSubmit = async ( values:z.infer<typeof formSchema>) =>{
         try{
           setImages([])
-          console.log(values)
-          console.log("aaaa")
+        
 
           const response = await axios.post("/api/image", values)
 
@@ -57,7 +58,9 @@ const ImagePage = () => {
 
 
         } catch (error: any){
-            //TODOL Open Pro Modal
+              if(error?.response?.status === 403){
+                proModal.onOpen()
+           }
             console.log(error)
         } 
         finally{
