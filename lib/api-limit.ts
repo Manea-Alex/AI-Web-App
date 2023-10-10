@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs"
 
-import prismadb from "./prisma.db"
+import prismadb from "./prismadb"
 import { MAX_FREE_COUNTS } from "@/constants"
 import { truncate } from "fs"
 
