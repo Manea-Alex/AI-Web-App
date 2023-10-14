@@ -20,7 +20,7 @@ export const LandingHero = () => {
                                     options = {{
                                         strings: [
 
-                                            "Chatbot.",
+                                            "Conversation.",
                                             "Photo Generation.",
                                             "Music Generation.",
                                             "Code Generation.",
