@@ -17,10 +17,12 @@ import {
 } from "lucide-react"
 import { FreeCounter } from "@/components/free-counter";
 
+// Define Montserrat font with specific weight for a consistent look
 const montserrat = Montserrat({
 weight: "600",
 subsets:["latin"]})
 
+// Define the navigation routes with their labels, icons, paths, and icon colors
 const routes = [
     {
         label: "Dashboard",
@@ -80,16 +82,19 @@ interface SidebarProps {
     isPro: boolean
 }
 
+// Sidebar component with API limit and subscription props
 const Sidebar = ({
     apiLimitCount = 0,
     isPro = false
 }: SidebarProps) => {
 
+      // usePathname hook to get the current path for active link styling
     const pathname = usePathname()
     return (  
         <div className="space-y-4 py-4 flex flex-col
         h-full bg-[#111827] text-white">
             
+            { /* Logo and application title with navigation to the dashboard */ }
             <div className="px-3 py-2 flex-1">
                 <Link href="/dashboard" className="flex
                 items-center pl-3 mb-14">
@@ -103,6 +108,8 @@ const Sidebar = ({
                         Genius
                     </h1>
                 </Link>
+
+                 { /* Map through routes to create navigation links */ }
                 <div className="space-y-1">
                     {routes.map((route) =>(
                         <Link 
@@ -119,6 +126,7 @@ const Sidebar = ({
                     ))}
                 </div>
             </div>
+             { /* Display the API limit counter and subscription status at the bottom of the sidebar */ }
             <FreeCounter
                 apiLimitCount={apiLimitCount}
                 isPro = {isPro}

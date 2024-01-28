@@ -1,37 +1,58 @@
 "use client"
 
+// Used for making HTTP requests to external APIs
 import axios from "axios";
-import * as z from "zod"
-import { Loader, MessageSquare } from "lucide-react";
-import { useForm } from "react-hook-form"
 
-import Heading from "@/components/heading";
+// zod: A schema validation library to validate  data structures
+import * as z from "zod";
 
+import { MessageSquare } from "lucide-react";
+
+// Custom UI components: Heading for page titles, UserAvatar and BotAvatar for user and bot representations in chats,
+// Empty for empty state messages, and Loading for indicating loading states.
+import Heading from "@/components/heading"
+import { UserAvatar } from "@/components/user-avatar";
+import { BotAvatar } from "@/components/bot-avatar";
+import { Empty } from "@/components/empty";
+import { Loading } from "@/components/loading";
+
+// Schema for form validation using zod
 import { formSchema } from "./constants";
+
 import { useRouter } from "next/navigation"
 
+// Using zod to create our schema and validation
 import { zodResolver } from "@hookform/resolvers/zod";
+
+//Shadcn components and packages
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form"
+
 import { useState } from "react";
+
+// interface from the OpenAI package used to define the structure of chat messages
 import  {ChatCompletionRequestMessage}  from "openai"
-import { Empty } from "@/components/empty";
-import { Loading } from "@/components/loading";
 import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
-import { BotAvatar } from "@/components/bot-avatar";
+
+// custom hook for managing the modal related to the pro features of the app.
 import { useProModal } from "@/hooks/use-pro-modal";
+
+// used for user feedback like success or error messages.
 import toast from "react-hot-toast";
 
 
 const ConversationPage = () => {
 
+    // Hook for modal and routing
     const proModal = useProModal()
-
     const router = useRouter()
+
+     // State for managing messages in the conversation
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([])
 
+    // Setup form with react-hook-form and zod for validation
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -39,12 +60,12 @@ const ConversationPage = () => {
         }
     })
 
+     // Flag for submission state
     const isLoading = form.formState.isSubmitting
 
+    // Handling form submission
     const onSubmit = async ( values:z.infer<typeof formSchema>) =>{
         try{
-
-          
            const userMessage: ChatCompletionRequestMessage = { role: "user", content: values.prompt };
 
            const newMessages = [...messages, userMessage]
@@ -57,7 +78,6 @@ const ConversationPage = () => {
 
           form.reset()
 
-
         } catch (error: any){
            if(error?.response?.status === 403){
                 proModal.onOpen()
@@ -66,10 +86,9 @@ const ConversationPage = () => {
            }
         } finally{
             router.refresh()
-        }
-        
+        }   
     }
-
+    // Rendering the conversation page
     return ( 
         <div>
            <Heading
@@ -110,16 +129,20 @@ const ConversationPage = () => {
                     </Form>
                 </div>
                 <div className="space-y-4 mt-4">
+                     {/* Display a loading indicator when a request is in progress */}
                     {isLoading && (
                         <div className="p-8 rounded-lg w-full flex items-center
                             justify-center bg-muted">
                                 <Loading/>
-
                         </div>
                     )}
+
+                     {/* Display a message if no conversation has started yet */}
                     {messages.length === 0 && !isLoading && (
                         <Empty label=" No conversation started"/>
                     )}
+
+                     {/* Render the conversation messages */}
                     <div className="flex flex-col-reverse gap-y-4">
                         {messages.map((message)=>(
                             <div key = {message.content}
@@ -128,6 +151,7 @@ const ConversationPage = () => {
                                 message.role === "user" ? "bg-white border border-black/10" : "bg-muted"
                              )}
                             >
+                                 {/* Display user or bot avatar depending on the message role */}
                                 {message.role === "user" ? <UserAvatar/> : 
                                 <BotAvatar /> }
 

@@ -1,10 +1,14 @@
 "use client"
 
+//Shadcn components
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+
 import { useProModal } from "@/hooks/use-pro-modal"
 
-import { Badge } from "@/components/ui/badge"
-
+// Lucide React icons
 import { 
   MessageSquare,
   Music, 
@@ -13,14 +17,16 @@ import {
   Code,
   Check,
   Zap} from "lucide-react"
-import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+
+// Used for making HTTP requests to external APIs
 import axios from "axios"
 import { useState } from "react"
+
+// used for user feedback like success or error messages.
 import toast from "react-hot-toast"
 
-
+//tools to display in the modal
 const tools = [
   {
     label: "Conversation",
@@ -66,11 +72,12 @@ export const ProModal = () => {
 
     const [loading, setLoading] = useState(false)
 
+    // Function to handle the subscription process
     const onSubscribe = async() =>{
       try{
           setLoading(true)
-          const response = axios.get("/api/stripe")
-          window.location.href = (await response).data.url
+          const response = axios.get("/api/stripe") // Request subscription URL
+          window.location.href = (await response).data.url // Redirect to payment page
 
       } catch (error)
       {
@@ -80,6 +87,7 @@ export const ProModal = () => {
       }
 
     }
+    // Render the modal with its content
     return(
        <Dialog open={proModal.isOpen}  onOpenChange={proModal.onClose}>
             <DialogContent>
@@ -87,6 +95,7 @@ export const ProModal = () => {
                 <DialogHeader>
                     <DialogTitle className="flex justify-center items-center
                     flex-col gap-y-4 pb-2">
+                       { /* Modal title and upgrade badge */ } 
                         <div className="flex items-center gap-x-2 font-bold py-1">
                         Upgrade to Genius
                         <Badge variant="premium" className="uppercase text-sm py-1">
@@ -95,6 +104,7 @@ export const ProModal = () => {
                         </div>
                     </DialogTitle>
                     <DialogDescription className="text-center pt-2 space-y-2 text-zinc-900 font-medium">
+                        { /* List of tools available in Pro subscription*/ } 
                         {tools.map((tool) =>(
                             <Card  
                               key={tool.label}

@@ -1,34 +1,46 @@
 "use client"
 
+// Used for making HTTP requests to external APIs
 import axios from "axios";
+// zod: A schema validation library to validate  data structures
 import * as z from "zod"
 import { VideoIcon } from "lucide-react";
 import { useForm } from "react-hook-form"
 
+// Custom UI components: Heading for page titles, UserAvatar and BotAvatar for user and bot representations in chats,
+// Empty for empty state messages, and Loading for indicating loading states.
 import Heading from "@/components/heading";
+import { Empty } from "@/components/empty";
+import { Loading } from "@/components/loading";
 
+// Schema for form validation using zod
 import { formSchema } from "./constants";
 import { useRouter } from "next/navigation"
 
+// Using zod to create our schema and validation
 import { zodResolver } from "@hookform/resolvers/zod";
+
+//Shadcn components and packages
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Empty } from "@/components/empty";
-import { Loading } from "@/components/loading";
+
+// custom hook for managing the modal related to the pro features of the app.
 import { useProModal } from "@/hooks/use-pro-modal";
+
+// used for user feedback like success or error messages.
 import toast from "react-hot-toast";
 
-
-
-
 const VideoPage = () => {
+    // Hook for modal and routing
     const proModal = useProModal()
-
     const router = useRouter()
+
+    // State for managing the videos in the conversation
     const [video, setVideo] = useState<string>()
 
+    // Setup form with react-hook-form and zod for validation
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -36,8 +48,10 @@ const VideoPage = () => {
         }
     })
 
+     // Flag for submission state
     const isLoading = form.formState.isSubmitting
 
+    // Handling form submission
     const onSubmit = async ( values:z.infer<typeof formSchema>) =>{
         try{
           setVideo(undefined)
@@ -61,6 +75,7 @@ const VideoPage = () => {
         
     }
 
+    // Rendering the video page
     return ( 
         <div>
            <Heading
@@ -101,6 +116,7 @@ const VideoPage = () => {
                     </Form>
                 </div>
                 <div className="space-y-4 mt-4">
+                     {/* Display a loading indicator when a request is in progress */}
                     {isLoading && (
                         <div className="p-8 rounded-lg w-full flex items-center
                             justify-center bg-muted">
@@ -108,9 +124,11 @@ const VideoPage = () => {
 
                         </div>
                     )}
+                       {/* Display a message if no conversation has started yet */}
                     {!video && !isLoading && (
                         <Empty label=" No video generated"/>
                     )}
+                       {/* Render the videos */}
                    {video && !isLoading && (
                         <video className="w-full aspect-video mt-8 rounded-lg border bg-black" controls>
                             <source src={video} />

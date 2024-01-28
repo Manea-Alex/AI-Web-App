@@ -1,3 +1,4 @@
+// Importing necessary components and providers
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -7,6 +8,7 @@ import { ModalProvider } from '@/components/modal-provider'
 import { ToasterProvider } from '@/components/toaster-provider'
 import { CrispProvider } from '@/components/crisp-provider'
 
+// Set up font
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
   description: 'AI Platform',
 }
 
+// RootLayout component wrapping the entire application
 export default function RootLayout({
   children,
 }: {

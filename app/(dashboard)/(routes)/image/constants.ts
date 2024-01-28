@@ -1,6 +1,9 @@
+// Importing zod for schema validation
 import * as z from "zod"
 
+// Defining the schema for the form data using zod
 export const formSchema = z.object ({
+    // The prompt, amount and resolution fields must be a string with at least 1 character
     prompt: z.string().min(1, {
         message: "Image Prompt is required"
     }),
@@ -8,6 +11,8 @@ export const formSchema = z.object ({
     resolution: z.string().min(1)
 })
 
+// 'amountOptions' is an array of objects representing the options for the number of photos the user can generate
+// Each object contains a 'value' representing the number of photos and a 'label' for displaying the option in the interface
 export const amountOptions = [
     {
         value: "1",
@@ -34,6 +39,9 @@ export const amountOptions = [
         label: "5 Photos"
     }
 ]
+
+// 'resolutionOptions' is an array of objects providing different resolution options for photo generation
+// Each option includes a 'value' indicating the resolution dimensions and a 'label' for the interface
 
 export const resolutionOptions = [
     {

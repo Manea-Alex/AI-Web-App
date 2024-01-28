@@ -18,6 +18,7 @@ const MobileSidebar = ({
 }: MobileSidebarProps) => {
     const [isMounted, setIsMounted] = useState(false)
 
+    // Conditional rendering based on mounting state
     useEffect(() =>{
         setIsMounted(true)
     },[])
@@ -25,6 +26,7 @@ const MobileSidebar = ({
     if(!isMounted)
         return null
 
+    // Sidebar content with custom styling for mobile view    
     return ( 
         <Sheet>
             <SheetTrigger>

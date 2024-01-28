@@ -1,4 +1,5 @@
 
+// Import required modules and utilities
 import { auth, currentUser} from "@clerk/nextjs"
 import { NextResponse } from "next/server"
 
@@ -6,24 +7,28 @@ import prismadb from "@/lib/prismadb"
 import { stripe } from "@/lib/stripe"
 import { absoluteUrl } from "@/lib/utils"
 
+// Create an absolute URL for the settings page
 const settingsUrl = absoluteUrl("/settings")
 
 export async function GET() {
     try{
-
+         // Authenticate the user and get their details
         const {userId} = auth()
         const user = await currentUser()
 
+        // If the user or user ID is not available, respond with an Unauthorized error
         if(!userId || !user){
             return new NextResponse("Unauthorized", {status: 401})
         }
 
+        // Retrieve the user's subscription details from the database
         const userSubscrption = await prismadb.userSubscription.findUnique({
             where: {
                 userId
             }
         })
 
+        // If a Stripe customer ID exists, create a billing portal session
         if (userSubscrption && userSubscrption.stripeCustomerId)
         {
             const stripeSession = await stripe.billingPortal.sessions.create({
@@ -31,9 +36,11 @@ export async function GET() {
                 return_url: settingsUrl
             })
 
+             // Return the URL to redirect the user to the Stripe billing portal
             return new NextResponse(JSON.stringify({url: stripeSession.url }))
         }
 
+        // If no subscription exists, create a new Stripe checkout session
         const stripeSession = await stripe.checkout.sessions.create({
             success_url: settingsUrl,
             cancel_url: settingsUrl,
@@ -63,6 +70,7 @@ export async function GET() {
             }
         })
 
+         // Return the URL to redirect the user to the Stripe checkout page
         return new NextResponse(JSON.stringify ({ url: stripeSession.url}))
 
     } catch(error)

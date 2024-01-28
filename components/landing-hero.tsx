@@ -1,10 +1,12 @@
 "use client"
 
+// Importing necessary modules and components
 import { useAuth } from "@clerk/nextjs"
 import TypeWriterComponent from "typewriter-effect"
 import Link from "next/link"
 import { Button } from "./ui/button"
 
+// LandingHero component for the main showcase area
 export const LandingHero = () => {
 
     const {isSignedIn} = useAuth()
@@ -14,6 +16,7 @@ export const LandingHero = () => {
                         <h1>
                             The Best AI tool for
                         </h1>
+                         {/* Animated text  */}
                         <div className="text-transparent bg-clip-text
                           bg-gradient-to-r from-purple-400 to-pink-600">
                                 <TypeWriterComponent
@@ -40,6 +43,7 @@ export const LandingHero = () => {
 
                 </div>
                 <div>
+                    {/* Button that will take you to the dashboard or sign-up */}
                     <Link href = {isSignedIn ? "/dashboard" : "/sign-up"}>
                         <Button variant = "premium" className="md:text-lg p-4 md:p-6
                           rounded-full font-semibold">

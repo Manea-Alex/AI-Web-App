@@ -1,7 +1,9 @@
 "use client"
 
+// Importing necessary components
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
+// Array of testimonials
 const testimonials = [
     {
         name: "Antonio",
@@ -29,7 +31,7 @@ const testimonials = [
     },
 ]
 
-
+// Displaying the Testimonials
 export const LandingContent = () => {
 
     return (

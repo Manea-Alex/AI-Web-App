@@ -13,6 +13,7 @@ import {
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 
+// Array of tools with  details used for rendering cards
 const tools = [
   {
     label: "Conversation",
@@ -54,8 +55,10 @@ const tools = [
 
 const DashboardPage = () => {
 
+  // useRouter hook for navigation on card click
   const router = useRouter()
  
+     // Render the Dashboard page
     return (
       <div>
         <div className="mb-8 space-y-8">

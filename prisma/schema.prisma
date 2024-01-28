@@ -1,16 +1,19 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+//defines the language & tool used to generate the client
 generator client {
   provider = "prisma-client-js"
 }
 
+// specifies the database connection
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
+// Model for UserApiLimit: Tracks API usage limits for each user
 model UserApiLimit {
   id        String   @id @default(cuid())
   userId    String   @unique
@@ -19,6 +22,7 @@ model UserApiLimit {
   updatedAt DateTime @updatedAt
 }
 
+// Model for UserSubscription: Manages subscription details for each user
 model UserSubscription {
   id                     String    @id @default(cuid())
   userId                 String    @unique
